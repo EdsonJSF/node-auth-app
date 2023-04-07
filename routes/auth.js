@@ -19,7 +19,15 @@ router.post(
 );
 
 /* Crear un nuevo usuario */
-router.post("/new", crearUsuario);
+router.post(
+  "/new",
+  [
+    check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("mail", "El email es obligatorio").isEmail(),
+    check("pass", "El password es obligatorio").isLength({ min: 6 }),
+  ],
+  crearUsuario
+);
 
 /* Validar token */
 router.get("/renew", revalidarToken);
