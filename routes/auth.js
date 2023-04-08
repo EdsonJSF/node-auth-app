@@ -5,7 +5,7 @@ const {
   loginUsuario,
   revalidarToken,
 } = require("../controlers/auth");
-const { validarCampos } = require("../midedlewares/validar-campos");
+const { validarCampos } = require("../middlewares/validar-campos");
 
 const router = Router();
 
