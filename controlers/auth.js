@@ -49,13 +49,49 @@ const crearUsuario = async (req, res = response) => {
   }
 };
 
-const loginUsuario = (req, res = response) => {
+const loginUsuario = async (req, res = response) => {
   const { mail, pass } = req.body;
 
-  return res.json({
-    ok: true,
-    msg: "Login de usuario",
-  });
+  try {
+    // Verificar el mail
+    const dbUser = await Usuario.findOne({ mail });
+    if (!dbUser) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Credencial mail no valida",
+      });
+    }
+
+    // Confirmar el pass
+    const validPass = bcrypt.compareSync(pass, dbUser.pass);
+    if (!validPass) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Credencial pass no valida",
+      });
+    }
+
+    // Generar JWT
+    const token = await generarJWT(dbUser._id, dbUser.name);
+
+    // Generar respuesta exitosa
+    return res.json({
+      ok: true,
+      msg: "Usuario logeado exitosamente",
+      data: {
+        id: dbUser._id,
+        mail: dbUser.mail,
+        name: dbUser.name,
+        token,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Error al hacer login",
+    });
+  }
 };
 
 const revalidarToken = (req, res = response) => {
