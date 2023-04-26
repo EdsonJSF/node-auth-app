@@ -33,11 +33,11 @@ const crearUsuario = async (req, res = response) => {
     return res.status(201).json({
       ok: true,
       msg: "Usuario creado exitosamente",
+      token,
       data: {
         id: dbUser._id,
         mail: dbUser.mail,
         name: dbUser.name,
-        token,
       },
     });
   } catch (error) {
@@ -78,11 +78,11 @@ const loginUsuario = async (req, res = response) => {
     return res.json({
       ok: true,
       msg: "Usuario logeado exitosamente",
+      token,
       data: {
         id: dbUser._id,
         mail: dbUser.mail,
         name: dbUser.name,
-        token,
       },
     });
   } catch (error) {
@@ -102,11 +102,11 @@ const revalidarToken = async (req, res = response) => {
   return res.json({
     ok: true,
     msg: "Token valido",
+    token,
     data: {
       id,
       name,
       mail,
-      token,
     },
   });
 };
